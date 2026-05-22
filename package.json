@@ -1,0 +1,20 @@
+{
+  "name": "photo-rename-tool",
+  "version": "1.0.0",
+  "description": "图片批量重命名工具 - 自动识别微信聊天截图中的名字并重命名",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "build": "mkdir -p dist && cp index.html dist/ && cp -r css dist/ && cp -r js dist/ && cp -r assets dist/"
+  },
+  "keywords": ["ocr", "rename", "tesseract", "wechat"],
+  "license": "MIT",
+  "dependencies": {
+    "tesseract.js": "^5.1.1",
+    "jszip": "^3.10.1",
+    "file-saver": "^2.0.5"
+  },
+  "devDependencies": {
+    "serve": "^14.2.3"
+  }
+}
