@@ -1,0 +1,577 @@
+/* ========================================
+   Photo Rename Tool - Magazine Editorial Style
+   Color: Cream #F7EFE2 | Hard Black #15130F | Red #E4422E
+   Fonts: Playfair Display | Noto Sans SC
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  --cream: #F7EFE2;
+  --cream-dark: #E8DCC8;
+  --black: #15130F;
+  --black-soft: #2A2724;
+  --red: #E4422E;
+  --red-hover: #C93522;
+  --sand: #D4C5B0;
+  --sand-light: #E5D9C8;
+  --border: #C4B8A5;
+
+  --font-display: 'Playfair Display', 'Times New Roman', serif;
+  --font-body: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--cream);
+  color: var(--black);
+  line-height: 1.7;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ========================================
+   Magazine Header
+   ======================================== */
+
+.magazine-header {
+  padding: var(--space-3xl) var(--space-lg) var(--space-2xl);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.magazine-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--red);
+  transform: scaleX(0.15);
+  transform-origin: left;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: var(--space-sm);
+}
+
+.header-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: var(--black);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.header-title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--red);
+}
+
+.header-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--black-soft);
+  margin-top: var(--space-md);
+  max-width: 480px;
+  letter-spacing: 0.03em;
+}
+
+/* ========================================
+   Main Layout - Asymmetric Grid
+   ======================================== */
+
+.app-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg) var(--space-3xl);
+}
+
+/* ========================================
+   Upload Zone
+   ======================================== */
+
+.upload-section {
+  margin-top: var(--space-2xl);
+}
+
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 4px;
+  padding: var(--space-3xl) var(--space-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: rgba(215, 207, 190, 0.3);
+  position: relative;
+}
+
+.upload-zone:hover,
+.upload-zone.drag-over {
+  border-color: var(--red);
+  background: rgba(228, 66, 46, 0.04);
+}
+
+.upload-zone.drag-over {
+  border-style: solid;
+  background: rgba(228, 66, 46, 0.06);
+}
+
+.upload-icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--space-md);
+  opacity: 0.6;
+}
+
+.upload-zone-text {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--black-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.upload-zone-hint {
+  font-size: 0.8rem;
+  color: var(--border);
+  font-weight: 300;
+}
+
+.upload-zone .red-dot,
+.red-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* ========================================
+   Image Preview Grid
+   ======================================== */
+
+.preview-section {
+  margin-top: var(--space-2xl);
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-md);
+}
+
+.preview-item {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--cream-dark);
+  aspect-ratio: 1 / 1;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.preview-item:hover {
+  transform: scale(1.02);
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.preview-item .overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-sm) var(--space-sm);
+  background: linear-gradient(transparent, rgba(21, 19, 15, 0.85));
+}
+
+.preview-item .file-name {
+  font-size: 0.7rem;
+  color: var(--cream);
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview-item .status-badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.preview-item .status-badge.pending {
+  background: var(--sand);
+  color: var(--black);
+}
+
+.preview-item .status-badge.processing {
+  background: var(--black);
+  color: var(--cream);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.preview-item .status-badge.done {
+  background: var(--red);
+  color: var(--cream);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ========================================
+   Results Table
+   ======================================== */
+
+.results-section {
+  margin-top: var(--space-2xl);
+  display: none;
+}
+
+.results-section.visible {
+  display: block;
+}
+
+.results-header {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--black);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.results-header .count {
+  font-size: 0.75rem;
+  background: var(--black);
+  color: var(--cream);
+  padding: 2px 10px;
+  border-radius: 3px;
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid rgba(196, 184, 165, 0.5);
+  flex-wrap: wrap;
+}
+
+.result-row .thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 3px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+
+.result-row .info {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-row .original-name {
+  font-size: 0.75rem;
+  color: var(--border);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-row .new-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.result-row .new-name-input {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--black);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  padding: var(--space-xs) 0;
+  outline: none;
+  min-width: 120px;
+  transition: border-color 0.2s;
+}
+
+.result-row .new-name-input:focus {
+  border-color: var(--red);
+}
+
+.result-row .arrow {
+  color: var(--border);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   Action Bar
+   ======================================== */
+
+.action-bar {
+  margin-top: var(--space-2xl);
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.btn-primary {
+  background: var(--black);
+  color: var(--cream);
+}
+
+.btn-primary:hover {
+  background: var(--black-soft);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--black);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--black);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+.btn-danger:hover {
+  background: var(--red);
+  color: var(--cream);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ========================================
+   Progress Bar
+   ======================================== */
+
+.progress-container {
+  margin-top: var(--space-lg);
+  display: none;
+}
+
+.progress-container.visible {
+  display: block;
+}
+
+.progress-label {
+  font-size: 0.8rem;
+  color: var(--black-soft);
+  margin-bottom: var(--space-sm);
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--sand-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar .fill {
+  height: 100%;
+  background: var(--red);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ========================================
+   Toast Notification
+   ======================================== */
+
+.toast {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--black);
+  color: var(--cream);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.toast.visible {
+  opacity: 1;
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-lg);
+  color: var(--border);
+  font-size: 0.9rem;
+  font-weight: 300;
+  display: none;
+}
+
+.empty-state.visible {
+  display: block;
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+
+.app-footer {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-3xl);
+  font-size: 0.7rem;
+  color: var(--border);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+.app-footer span {
+  opacity: 0.5;
+}
+
+/* ========================================
+   Mobile Adjustments
+   ======================================== */
+
+@media (max-width: 600px) {
+  .magazine-header {
+    padding: var(--space-2xl) var(--space-md) var(--space-xl);
+  }
+
+  .header-title {
+    font-size: 1.75rem;
+  }
+
+  .app-container {
+    padding: 0 var(--space-md) var(--space-2xl);
+  }
+
+  .upload-zone {
+    padding: var(--space-2xl) var(--space-md);
+  }
+
+  .result-row {
+    gap: var(--space-md);
+  }
+
+  .btn {
+    padding: 14px 24px;
+    font-size: 0.85rem;
+  }
+
+  .action-bar {
+    flex-direction: column;
+  }
+
+  .action-bar .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--space-sm);
+  }
+}
