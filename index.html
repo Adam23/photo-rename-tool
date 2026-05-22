@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="图片批量重命名工具 - 上传微信聊天截图，自动识别名字并重命名下载">
+  <meta name="theme-color" content="#F7EFE2">
+  <title>图片批量重命名 — 自动识别店长名字</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Tesseract.js (OCR) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+  <!-- JSZip -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+  <!-- FileSaver -->
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+</head>
+<body>
+
+  <!-- ============================================
+       Magazine Header
+       ============================================ -->
+  <header class="magazine-header">
+    <div class="eyebrow">
+      <span class="red-dot"></span>TOOL · 2026
+    </div>
+    <h1 class="header-title">
+      图片批量<em>重命名</em>
+    </h1>
+    <p class="header-subtitle">
+      上传微信聊天截图，自动识别「店长：某某」中的名字，一键打包下载重命名后的图片。所有处理在浏览器本地完成，隐私安全。
+    </p>
+  </header>
+
+  <!-- ============================================
+       Main App
+       ============================================ -->
+  <div class="app-container">
+
+    <!-- Upload Zone -->
+    <section class="upload-section">
+      <div class="upload-zone" id="uploadZone">
+        <!-- SVG upload icon -->
+        <svg class="upload-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="6" y="12" width="36" height="28" rx="2" stroke="#C4B8A5" stroke-width="2"/>
+          <circle cx="16" cy="22" r="3" stroke="#C4B8A5" stroke-width="1.5"/>
+          <path d="M6 36 L18 28 L26 34 L34 22 L42 28" stroke="#C4B8A5" stroke-width="2" stroke-linejoin="round"/>
+          <circle cx="38" cy="10" r="8" fill="#E4422E"/>
+          <path d="M38 6 L38 14 M34 10 L42 10" stroke="#F7EFE2" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div class="upload-zone-text">点击上传或拖拽图片</div>
+        <div class="upload-zone-hint">支持 PNG / JPG / WebP，可批量选择</div>
+        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+      </div>
+    </section>
+
+    <!-- Progress Bar -->
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-label">
+        <span id="progressText">准备中...</span>
+        <span id="progressCount">0 / 0</span>
+      </div>
+      <div class="progress-bar">
+        <div class="fill" id="progressFill" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Preview Grid -->
+    <section class="preview-section">
+      <div class="preview-grid" id="previewGrid"></div>
+      <div class="empty-state visible" id="emptyState">
+        还没有上传图片 — 点击上方区域开始
+      </div>
+    </section>
+
+    <!-- Results Table -->
+    <section class="results-section" id="resultsSection">
+      <div class="results-header">
+        识别结果 <span class="count" id="resultCount">0/0</span>
+      </div>
+      <div id="resultsList">
+        <!-- Dynamically populated -->
+      </div>
+    </section>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button class="btn btn-primary" id="btnStartOCR" disabled>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="8" cy="8" r="6"/>
+          <circle cx="8" cy="8" r="2" fill="currentColor"/>
+        </svg>
+        开始识别
+      </button>
+      <button class="btn btn-primary" id="btnDownload" disabled>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 2 L8 12 M4 9 L8 13 L12 9"/>
+          <path d="M2 14 L14 14"/>
+        </svg>
+        打包下载
+      </button>
+      <button class="btn btn-danger" id="btnClear" disabled>
+        清除全部
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ============================================
+       Footer
+       ============================================ -->
+  <footer class="app-footer">
+    <span>所有图片在浏览器本地处理，不会上传到任何服务器</span>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ============================================
+       Scripts (load order matters)
+       ============================================ -->
+  <script src="js/ocr.js"></script>
+  <script src="js/rename.js"></script>
+  <script src="js/download.js"></script>
+  <script src="js/ui.js"></script>
+
+</body>
+</html>
