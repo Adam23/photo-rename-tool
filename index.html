@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="图片批量重命名工具 - 上传微信聊天截图，自动识别名字并重命名下载">
   <meta name="theme-color" content="#F7EFE2">
-  <title>图片批量重命名 — 自动识别店长名字</title>
+  <title>图片批量重命名 — 以人名为文件名</title>
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Tesseract.js (OCR) -->
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <!-- Tesseract.js v5 (OCR) - 首选 jsdelivr，失败回退 unpkg -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"
+          onerror="var s=document.createElement('script');s.src='https://unpkg.com/tesseract.js@5.1.1/dist/tesseract.min.js';document.head.appendChild(s);"></script>
 
   <!-- JSZip -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -33,7 +34,7 @@
       图片批量<em>重命名</em>
     </h1>
     <p class="header-subtitle">
-      上传微信聊天截图，自动识别「店长：某某」中的名字，一键打包下载重命名后的图片。所有处理在浏览器本地完成，隐私安全。
+      上传微信聊天截图，自动识别「某某 店长」中的人名，以人名为文件名打包下载。所有处理在浏览器本地完成，隐私安全。
     </p>
   </header>
 
@@ -86,6 +87,11 @@
       <div id="resultsList">
         <!-- Dynamically populated -->
       </div>
+      <!-- Debug 面板：显示 OCR 原始输出 -->
+      <details class="debug-panel" id="debugPanel" style="display:none;">
+        <summary>🔍 OCR 调试信息</summary>
+        <div id="debugContent"></div>
+      </details>
     </section>
 
     <!-- Action Bar -->

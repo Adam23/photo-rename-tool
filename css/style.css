@@ -4,7 +4,7 @@
    Fonts: Playfair Display | Noto Sans SC
    ======================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+/* ====== 使用系统自带字体，避免 Google Fonts 被墙 ====== */
 
 :root {
   --cream: #F7EFE2;
@@ -17,8 +17,11 @@
   --sand-light: #E5D9C8;
   --border: #C4B8A5;
 
-  --font-display: 'Playfair Display', 'Times New Roman', serif;
-  --font-body: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  /* 衬线字体 - 用于标题、装饰文字 */
+  --font-display: 'Songti SC', 'STSongti', 'Noto Serif CJK SC', 'Source Han Serif SC', 'Times New Roman', 'Georgia', serif;
+
+  /* 无衬线字体 - 用于正文 */
+  --font-body: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Source Han Sans SC', sans-serif;
 
   --space-xs: 4px;
   --space-sm: 8px;
@@ -529,6 +532,70 @@ body {
 
 .app-footer span {
   opacity: 0.5;
+}
+
+/* ========================================
+   Debug Panel
+   ======================================== */
+
+.debug-panel {
+  margin-top: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.debug-panel summary {
+  padding: var(--space-md);
+  font-size: 0.8rem;
+  color: var(--black-soft);
+  cursor: pointer;
+  background: var(--sand-light);
+  font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.debug-panel summary:hover {
+  background: var(--cream-dark);
+}
+
+#debugContent {
+  padding: var(--space-md);
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: var(--black-soft);
+  max-height: 300px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+#debugContent .debug-entry {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--sand-light);
+}
+
+#debugContent .debug-entry:last-child {
+  border-bottom: none;
+}
+
+#debugContent .debug-label {
+  color: var(--red);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+#debugContent .debug-text {
+  color: var(--black);
+  word-break: break-all;
+  background: var(--cream);
+  padding: 4px 8px;
+  border-radius: 2px;
+  margin: 4px 0;
+}
+
+#debugContent .debug-error {
+  color: var(--red);
+  font-style: italic;
 }
 
 /* ========================================

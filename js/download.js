@@ -90,7 +90,19 @@ const Download = (() => {
    * @param {string} filename
    */
   function saveBlob(blob, filename) {
-    saveAs(blob, filename);
+    if (typeof saveAs !== 'undefined') {
+      saveAs(blob, filename);
+    } else {
+      // Fallback
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   }
 
   /**

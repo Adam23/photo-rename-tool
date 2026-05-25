@@ -10,6 +10,7 @@ const App = (() => {
   // 状态
   let uploadedFiles = [];
   let isProcessing = false;
+  let lastOcrResults = []; // 保存最近一次 OCR 结果用于调试
 
   /**
    * 缓存 DOM 引用
@@ -31,6 +32,8 @@ const App = (() => {
       btnDownload: document.getElementById('btnDownload'),
       btnClear: document.getElementById('btnClear'),
       toast: document.getElementById('toast'),
+      debugPanel: document.getElementById('debugPanel'),
+      debugContent: document.getElementById('debugContent'),
     };
   }
 
@@ -267,15 +270,24 @@ const App = (() => {
         updatePreviewBadge(result.index, result.success ? 'done' : 'done');
       });
 
+      // 保存原始结果用于调试
+      lastOcrResults = results;
+
       // 创建重命名条目
       Rename.createEntries(results);
 
       // 渲染结果
       renderResults();
+      renderDebug(results);
       updateActions();
 
       const stats = Rename.getStats();
-      showToast(`识别完成！成功识别 ${stats.success}/${stats.total} 个名字`);
+      const failedCount = stats.total - stats.success;
+      if (failedCount > 0) {
+        showToast(`识别完成！成功 ${stats.success}/${stats.total}，${failedCount} 张失败。点击下方「🔍 OCR 调试信息」查看原因`);
+      } else {
+        showToast(`识别完成！成功识别 ${stats.success}/${stats.total} 个名字`);
+      }
 
     } catch (err) {
       console.error('OCR 处理失败:', err);
@@ -318,6 +330,67 @@ const App = (() => {
   }
 
   /**
+   * 渲染 OCR 调试面板
+   */
+  function renderDebug(results) {
+    // 始终显示调试面板
+    els.debugPanel.style.display = 'block';
+
+    let html = '';
+    results.forEach((r, i) => {
+      const icon = r.success ? '✅' : '❌';
+      html += `<div class="debug-entry">`;
+      html += `<div class="debug-label">${icon} ${r.file.name}</div>`;
+
+      // 成功信息
+      if (r.success) {
+        html += `<div style="color:#2E7D32;font-size:0.8rem;margin:4px 0;">`;
+        html += `识别结果: <strong>${r.name}</strong>`;
+        if (r.debug && r.debug.attempts) {
+          const hitAttempt = r.debug.attempts.find(a => a.name);
+          if (hitAttempt) {
+            html += ` <span style="font-size:0.7rem;color:var(--border);">(策略: ${hitAttempt.label}, 方法: ${hitAttempt.method})</span>`;
+          }
+        }
+        html += `</div>`;
+      }
+
+      if (r.error) {
+        html += `<div class="debug-error">错误: ${r.error}</div>`;
+      } else if (r.debug && r.debug.attempts) {
+        // 只显示未命中或命中策略的详情
+        r.debug.attempts.forEach((a, j) => {
+          const isHit = a.name && a.name === r.name;
+          const bgColor = isHit ? 'rgba(46,125,50,0.08)' : 'transparent';
+          html += `<div style="font-size:0.7rem;color:var(--border);margin:6px 0 2px;background:${bgColor};padding:2px 4px;border-radius:2px;">`;
+          html += `[${a.label}]`;
+          if (a.method) {
+            html += ` 方法:${a.method}`;
+          }
+          if (isHit) {
+            html += ` <span style="color:#2E7D32;">★ 命中</span>`;
+          }
+          html += `</div>`;
+          if (a.text) {
+            html += `<div class="debug-text">${a.text || '（空）'}</div>`;
+          }
+          if (a.error) {
+            html += `<div class="debug-error">${a.error}</div>`;
+          }
+        });
+      } else {
+        html += `<div class="debug-text">${r.fullText || '（未识别到文字）'}</div>`;
+      }
+      if (!r.success) {
+        html += `<div style="color:var(--red);font-size:0.75rem;margin-top:4px;">⚠ 所有策略均未识别到人名</div>`;
+      }
+      html += `</div>`;
+      html += `<hr style="border-color:var(--border);opacity:0.3;margin:8px 0;">`;
+    });
+    els.debugContent.innerHTML = html;
+  }
+
+  /**
    * 清除所有
    */
   function clearAll() {
@@ -328,6 +401,8 @@ const App = (() => {
     els.resultsList.innerHTML = '';
     els.resultsSection.classList.remove('visible');
     els.emptyState.classList.add('visible');
+    els.debugPanel.style.display = 'none';
+    lastOcrResults = [];
     updateActions();
     setProgress(false);
     showToast('已清除全部');
@@ -384,6 +459,16 @@ const App = (() => {
    */
   function init() {
     cacheDOMElements();
+
+    // 检查必要依赖是否加载
+    if (typeof Tesseract === 'undefined') {
+      els.uploadZone.innerHTML = '<div style="padding:32px;color:#E4422E">OCR 引擎加载失败，请刷新页面重试</div>';
+      console.error('Tesseract.js 未加载');
+      return;
+    }
+    if (typeof JSZip === 'undefined') {
+      console.warn('JSZip 未加载，打包下载功能可能不可用');
+    }
 
     // 初始显示空状态
     els.emptyState.classList.add('visible');
