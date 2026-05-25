@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "npx serve . -p 3000",
-    "build": "mkdir -p dist && cp index.html dist/ && cp -r css dist/ && cp -r js dist/ && cp -r assets dist/"
+    "build": "mkdir -p dist && cp index.html dist/ && cp -r css dist/ && cp -r js dist/ && [ -d assets ] && cp -r assets dist/ || true"
   },
   "keywords": ["ocr", "rename", "tesseract", "wechat"],
   "license": "MIT",
